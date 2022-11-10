@@ -1,0 +1,50 @@
+.html {
+    font-size: 100%;
+
+}
+
+body {
+    max-width: 960px;
+    width: auto;
+    font-family: serif;
+    background: url(https://github.com/oasys-tech/Reversi-4/raw/main/background.jpg);
+    color: white;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+.usi {
+    display: contents;
+
+}
+
+.usi_image {
+    width: 480px;
+    margin: 0px 100px 0px 160px;
+}
+
+#echo {
+    height: 100px px;
+    width: 100px;
+    font-size: 30px;
+}
+
+#text_s {
+    background-color: azure;
+}
+
+button {
+    display: inline-block;
+    /*コレ*/
+}
+
+div {
+    text-align: center;
+}
+
+.benkyou {
+    display: flex;
+    flex-direction: column;
+}

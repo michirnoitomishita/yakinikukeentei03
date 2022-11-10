@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/nikuizu02.css">
+
+
+</head>
+
+
+<body>
+    <h1>
+        焼肉検定（赤身編）
+    </h1>
+    <p>シャッフルした番号のお肉の部位名を答えるのじゃ</p>
+    <div class="usi">
+        <div class="usi_image">
+            <img src="/img/うしベース数値.png" width="480px" alt="usi_image">
+            <div class="usi_botan">
+
+            </div>
+
+        </div>
+    </div>
+
+    <audio autoplay loop>
+        <source src="/music/BGM_火の音.mp3">
+        あなたのブラウザーは <code>audio</code> 要素をサポートしていません。
+    </audio>
+
+    <main>
+
+    </main>
+
+    <section style="text-align:center;">
+        <input type="button" id="start" name="start" value="スタート" onclick="startBingo()">
+        <input type="button" id="stop" name="stop" value="ストップ" onclick="stopBingo()" style="display:none;">
+        <br>
+        <div id="view" style="text-align:center;"></div>
+        <hr />
+        <div id="out"></div>
+        <hr />
+    </section>
+
+    <!-- 三択クイズ -->
+    <h2>三択クイズ</h2>
+    <hr>
+    <h3>問題</h3>
+    <div id="text_q"></div>
+    <h3>選択</h3>
+    <div id="text_s"></div>
+    <h3>解答</h3>
+    <div id="text_a"></div>
+
+    <!-- 勉強ページ-->
+    <h2>ここから勉強を始めていきます。</h2>
+    <div class="benkyou">
+        <div class="benkyoubotan1">
+            <button type="button" id="openWindowBtn">かた・かたロース</button>
+            <script>
+                document.querySelector('#openWindowBtn').addEventListener('click', () => {
+                    window.open("http://127.0.0.1:5500/katapage.html", "", "width=600,height=600");
+                });</script>
+            <button type="button" id="openWindowBtn2">リブ・サーロイン・ヒレ</button>
+            <script>
+                document.querySelector('#openWindowBtn2').addEventListener('click', () => {
+                    window.open("http://127.0.0.1:5500/roinpage.html", "", "width=600,height=600");
+                });</script>
+            <button type="button" id="openWindowBtn3">ばら（かたばら・ともばら）</button>
+            <script>
+                document.querySelector('#openWindowBtn3').addEventListener('click', () => {
+                    window.open("http://127.0.0.1:5500/barapage.html", "", "width=600,height=600");
+                });</script>
+        </div>
+        <div class="benkyoubotan2">
+            <button type="button" id="openWindowBtn4">もも（らんいち・うちもも・しんたま）</button>
+            <script>
+                document.querySelector('#openWindowBtn4').addEventListener('click', () => {
+                    window.open("http://127.0.0.1:5500/momo.html", "", "width=600,height=600");
+                });</script>
+            <button type="button" id="openWindowBtn5">そともも・ネック・すね</button>
+            <script>
+                document.querySelector('#openWindowBtn5').addEventListener('click', () => {
+                    window.open("http://127.0.0.1:5500/sotomomo.html", "", "width=600,height=600");
+                });</script>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <p style="text-align:center;">Copyright &copy;
+            <script type="text/javascript">
+                document.write(new Date().getFullYear());
+            </script>
+            <a href="http://www.y-yasumori.com/">Yasumori Groop</a> co.
+        </p>
+    </footer>
+
+    音楽再生<BR>
+    <AUDIO id="music">
+        <SOURCE src="/music/Quiz-Correct_Answer01-mp3/Quiz-Correct_Answer01-1.mp3" type="audio/mpeg">
+        <SOURCE src="sample.ogg" type="audio/ogg">
+    </AUDIO>
+    <FORM name="musicform">
+        <INPUT id="playbutton" type="button" value="再生">
+    </FORM>
+    <SCRIPT>
+        var audio = document.getElementById("music");
+        var button = document.getElementById("playbutton");
+        button.addEventListener("click", function () {
+            audio.play();
+        }, false);
+    </SCRIPT>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+
+    <script>
+        $ = function (x) {
+            return document.getElementById(x);
+        }
+
+        //シャッフル用数字配列
+        var numList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,];
+
+        var isStop = true;
+
+        function startBingo() {
+            // ボタンの表示切り替え
+            $("start").style.display = "none";
+            $("stop").style.display = "inline";
+            isStop = false;
+            roulette();
+        }
+
+        function stopBingo() {
+            // ボタンの表示切り替え
+            $("start").style.display = "inline";
+            $("stop").style.display = "none";
+            isStop = true;
+        }
+
+        function roulette() {
+            var id = "";
+            var rnd = Math.floor(Math.random() * numList.length);
+
+            // ストップボタンが押された
+            if (isStop) {
+                // 遅延呼び出しを解除
+                clearTimeout(id);
+
+                $("view").innerText = numList[rnd];
+                if (!$("out").innerText) {
+                    $("out").innerText = $("out").innerText + numList[rnd];
+                }
+                else {
+                    $("out").innerText = $("out").innerText + "　" + numList[rnd];
+                }
+
+                //決定した数字をリストから削除する
+                numList.splice(rnd, 1);
+                // リストが空になったら終了
+                if (numList.length == 0) {
+                    alert("最後です。");
+                    $("start").disabled = true;
+                }
+                return false;
+            }
+
+            // 乱数を画面に表示
+            $("view").innerText = numList[rnd];
+            // 100ms後に再帰的に実行するよう登録する
+            id = setTimeout("roulette()", 13);
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        //初期設定
+        q_sel = 3; //選択肢の数
+        q_max = 13; //出題数
+
+        setReady();
+
+        //初期設定
+        function setReady() {
+            count = 0; //問題番号
+            ansers = new Array(); //解答記録
+
+            //問題と解答
+            qa = new Array();
+            qa[0] = ["①の呼び名はどれ？", "ネック", "らんいち", "かた", 1];
+            qa[1] = ["②の呼び名はどれ？", "かた", "かたロース", "リブロース", 2];
+            qa[2] = ["③の呼び名はどれ？", "ランイチ", "ヒレ", "リブロース", 3];
+            qa[3] = ["④の呼び名はどれ？", "サーロイン", "ヒレ", "ともばら", 1];
+            qa[4] = ["⑤の呼び名はどれ？", "そともも", "らんいち", "もも（しんたま）", 2];
+            qa[5] = ["⑥の呼び名はどれ？", "しんたま", "うちもも", "そともも", 3];
+            qa[6] = ["⑦の呼び名はどれ？", "ともばら", "かたばら", "ヒレ", 3];
+            qa[7] = ["⑧の呼び名はどれ？", "うちもも", "もも（しんたま）", "ネック", 1];
+            qa[8] = ["⑨の呼び名はどれ？", "かたロース", "かた", "ヒレ", 2];
+            qa[9] = ["⑩の呼び名はどれ？", "もも（しんたま）", "かた", "かたばら", 3];
+            qa[10] = ["⑪の呼び名はどれ？", "ともばら", "リブロース", "サーロイン", 1];
+            qa[11] = ["⑫の呼び名はどれ？", "かたばら", "もも（しんたま）", "すね", 2];
+            qa[12] = ["⑬の呼び名はどれ？", "かたばら", "かた", "すね", 3];
+
+            //最初の問題
+            quiz();
+        }
+
+        //問題表示
+        function quiz() {
+            var s, n;
+            //問題
+            md = Math.floor(Math.random() * qa.length); //乱数
+            document.getElementById("text_q").innerHTML = (count + 1) + "問目：" + qa[md][0];
+            //選択肢
+            s = "";
+            for (n = 1; n <= q_sel; n++) {
+                if (qa[md][n] != "") {
+                    s += "【<a href='javascript:anser(" + n + ")'>" + n + "：" + qa[md][n] + "</a>】";
+                }
+            }
+            document.getElementById("text_s").innerHTML = s;
+            // qa.splice(md,1); // ------------------
+        }
+
+        //解答表示
+        function anser(num) {
+            var s;
+            s = (count + 1) + "問目：";
+            //答え合わせ
+            if (num == qa[md][q_sel + 1]) {
+                //正解
+                ansers[count] = "○";
+            } else {
+                ansers[count] = "×";
+            }
+            s += ansers[count] + qa[md][num];
+            document.getElementById("text_a").innerHTML = s;
+
+            qa.splice(md, 1); console.log(qa); // ++++++++++
+            //次の問題を表示
+            count++;
+            if (count < q_max) {
+                quiz();
+            } else {
+                //終了
+                s = "<table border='2'><caption>成績発表</caption>";
+                //1行目
+                s += "<tr><th>問題</th>";
+                for (n = 0; n < q_max; n++) {
+                    s += "<th>" + (n + 1) + "</th>";
+                }
+                s += "</tr>";
+                //2行目
+                s += "<tr><th>成績</th>";
+                for (n = 0; n < q_max; n++) {
+                    s += "<td>" + ansers[n] + "</td>";
+                }
+                s += "</tr>";
+                s += "</table>";
+                document.getElementById("text_q").innerHTML = s;
+                //次の選択肢
+                s = "【<a href='javascript:history.back()'>前のページに戻る</a>】";
+                s += "【<a href='javascript:setReady()'>同じ問題を最初から</a>】";
+                s += "【<a href=''>次の問題に進む</a>】";
+                document.getElementById("text_s").innerHTML = s;
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
